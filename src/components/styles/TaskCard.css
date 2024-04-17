@@ -1,0 +1,40 @@
+.card {
+  text-align: center;
+  padding-bottom: 10px;
+  margin: 10px;
+  width: 300px;
+  border: 1px dashed black;
+}
+
+button {
+  margin: 10px;
+}
+
+.delete-button {
+  background-color: rgb(202, 112, 112);
+  color: white;
+}
+.delete-button:hover {
+  background-color: rgb(202, 76, 76);
+  color: white;
+}
+
+.completed-button {
+  background-color: rgb(80, 202, 76);
+  color: white;
+}
+
+.completed-button:hover {
+  background-color: rgb(80, 202, 76);
+  color: white;
+  cursor: auto;
+}
+
+.complete-button {
+  color: white;
+  background-color: rgb(90, 90, 90);
+}
+
+.complete-button:hover {
+  background-color: rgb(63, 63, 63);
+}

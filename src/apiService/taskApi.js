@@ -24,4 +24,30 @@ const deleteTask = async (id) => {
   return message;
 };
 
-export default { getAllTasks, addTask, deleteTask };
+const updateTask = async (id, taskData) => {
+  const response = await fetch(`${baseUrl}/tasks/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(taskData),
+    headers: { "Content-type": "application/json" },
+  });
+  const updatedTask = await response.json();
+  return updatedTask;
+};
+
+const updateTaskStatus = async (id, status) => {
+  const response = await fetch(`${baseUrl}/tasks/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+    headers: { "Content-type": "application/json" },
+  });
+  const updatedTask = await response.json();
+  return updatedTask;
+};
+
+export default {
+  getAllTasks,
+  addTask,
+  deleteTask,
+  updateTask,
+  updateTaskStatus,
+};

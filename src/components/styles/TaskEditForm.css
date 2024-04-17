@@ -1,0 +1,19 @@
+.edit > input {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+select {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.cancel-button {
+  background-color: rgb(202, 112, 112);
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: rgb(202, 76, 76);
+  color: white;
+}

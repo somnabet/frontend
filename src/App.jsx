@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-
-import "./App.css";
 import { TaskCard } from "./components/TaskCard";
 import taskApi from "./apiService/taskApi";
+import TaskForm from "./components/TaskForm";
+import FilterButtons from "./components/FilterButton";
 
 function App() {
   const [tasks, setTasks] = useState([]);
+
+  const [filter, setFilter] = useState("ALL");
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -18,7 +20,7 @@ function App() {
     setTasks(tasks);
   };
 
-  const addTaskAnSync = async () => {
+  const addTaskAndSync = async () => {
     await taskApi.addTask({ title, description, dueDate });
     refresh(!dummy);
   };
@@ -28,36 +30,57 @@ function App() {
     refresh(!dummy);
   };
 
+  const updateTaskAndSync = async (idToUpdate, updatedTaskData) => {
+    await taskApi.updateTask(idToUpdate, updatedTaskData);
+    refresh(!dummy);
+  };
+
+  const completeTaskAndSync = async (idToComplete) => {
+    await taskApi.updateTaskStatus(idToComplete, "completed");
+    refresh(!dummy);
+  };
+
   useEffect(() => {
     getTasks();
   }, [dummy]);
 
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "ALL") {
+      return true;
+    }
+    return task.status === filter;
+  });
+
+  const sortedTasks = filteredTasks.sort((a, b) => {
+    const dateA = new Date(a.dueDate);
+    const dateB = new Date(b.dueDate);
+    return dateA - dateB;
+  });
+
   return (
     <>
-      <h1>Llista de tasques</h1>
-      {tasks.map((task) => (
-        <TaskCard
-          key={task._id}
-          {...task}
-          onDelete={() => deleteTaskAndSync(task._id)}
-        ></TaskCard>
-      ))}
-      <label>Títol</label>
-      <input value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
-      <label>Descripció</label>
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.currentTarget.value)}
-      />
-      <label>Termini</label>
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.currentTarget.value)}
-      />
-      <button type="submit" onClick={addTaskAnSync}>
-        Afegeix
-      </button>
+      <div className="container">
+        <TaskForm
+          setTitle={setTitle}
+          setDescription={setDescription}
+          setDueDate={setDueDate}
+          addTaskAnSync={addTaskAndSync}
+        />
+        <div className="list">
+          <FilterButtons onFilterChange={setFilter} />
+          {sortedTasks.map((task) => (
+            <TaskCard
+              key={task._id}
+              {...task}
+              onDelete={() => deleteTaskAndSync(task._id)}
+              onUpdate={(updatedTaskData) =>
+                updateTaskAndSync(task._id, updatedTaskData)
+              }
+              onComplete={() => completeTaskAndSync(task._id)}
+            />
+          ))}
+        </div>
+      </div>
     </>
   );
 }
